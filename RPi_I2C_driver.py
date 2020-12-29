@@ -57,6 +57,7 @@ LCD_5x8DOTS = 0x00
 # flags for backlight control
 LCD_BACKLIGHT = 0x08
 LCD_NOBACKLIGHT = 0x00
+LIGHT_STATE = [LCD_BACKLIGHT, LCD_NOBACKLIGHT]
 
 En = 0b00000100 # Enable bit
 Rw = 0b00000010 # Read/Write bit
