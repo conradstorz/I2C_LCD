@@ -120,9 +120,8 @@ class lcd:
         self.lcd_write_four_bits(mode | (cmd & 0xF0))
         self.lcd_write_four_bits(mode | ((cmd << 4) & 0xF0))
 
-    def lcd_write_char(
-        self, charvalue, mode=1
-    ):  # write a character to lcd (or character rom) 0x09: backlight | RS=DR<
+    def lcd_write_char(self, charvalue, mode=1):  
+        # write a character to lcd (or character rom) 0x09: backlight | RS=DR<
         self.lcd_write_four_bits(mode | (charvalue & 0xF0))
         self.lcd_write_four_bits(mode | ((charvalue << 4) & 0xF0))
         # works!
@@ -149,16 +148,7 @@ class lcd:
 
     def lcd_display_string_pos(self, string, line, pos):
         # define precise positioning (addition from the forum discussion)
-        if line == 1:
-            pos_new = pos
-        elif line == 2:
-            pos_new = 0x40 + pos
-        elif line == 3:
-            pos_new = 0x14 + pos
-        elif line == 4:
-            pos_new = 0x54 + pos
-
-        self.lcd_write(0x80 + pos_new)
-
+        position_offset = [0x00, 0x00, 0x40, 0x14, 0x54]
+        self.lcd_write(0x80 + pos + position_offset[line])
         for char in string:
             self.lcd_write(ord(char), Rs)
