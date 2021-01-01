@@ -149,6 +149,7 @@ class lcd:
     def lcd_display_string_pos(self, string, line, pos):
         # define precise positioning (addition from the forum discussion)
         position_offset = [0x00, 0x00, 0x40, 0x14, 0x54]
+        # index 0 is a placeholder and is never used.
         self.lcd_write(0x80 + pos + position_offset[line])
         for char in string:
             self.lcd_write(ord(char), Rs)
