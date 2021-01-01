@@ -2,13 +2,14 @@
 import RPi_I2C_driver
 from time import *
 
+# instantiate an object of the LCD class.
 mylcd = RPi_I2C_driver.lcd()
 
 
 def test_2():
     """Original test routines from Denis Pleic
     """
-    mylcd.lcd_display_string("RPi I2C test", 1)
+    mylcd.lcd_display_string("RPi I2C test #2", 1)
     mylcd.lcd_display_string(" Custom chars", 2)
 
     sleep(2)  # 2 sec delay
@@ -141,5 +142,30 @@ def test_2():
     mylcd.lcd_clear()
     sleep(1)
     mylcd.backlight(0)
+    sleep(1)
     return # end of test2 routines
 
+
+def test_3():
+    import string
+    from random import randrange, choice
+    mylcd.lcd_display_string("RPi I2C test #3", 1)
+    sleep(2)
+    chars = string.printable
+    cont = True
+    while cont:
+        # display some random text
+        x = randrange(20)
+        y = randrange(4) + 1
+        c = choice(chars)
+        try:
+            mylcd.lcd_display_string_pos(c, y, x)
+        except OSError as e:
+            print(f'Error: {e}')
+            return 
+            
+    mylcd.lcd_clear()
+    sleep(1)
+    mylcd.backlight(0)    
+    sleep(1)
+    return
