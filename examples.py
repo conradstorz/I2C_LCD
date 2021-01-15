@@ -1,14 +1,27 @@
 # requires RPi_I2C_driver.py
 import RPi_I2C_driver
 from time import *
+import string
+from random import randrange, choice
 
-# instantiate an object of the LCD class.
-mylcd = RPi_I2C_driver.lcd()
+
+def test_1(addr):
+    """Display address of device on device.
+    """
+    # instantiate an object of the LCD class.
+    mylcd = RPi_I2C_driver.lcd(addr)    
+    
+    mylcd.lcd_display_string(f'{str(addr)}', 1)   
 
 
-def test_2():
+
+
+def test_2(addr):
     """Original test routines from Denis Pleic
     """
+    # instantiate an object of the LCD class.
+    mylcd = RPi_I2C_driver.lcd(addr)    
+    
     mylcd.lcd_display_string("RPi I2C test #2", 1)
     mylcd.lcd_display_string(" Custom chars", 2)
 
@@ -146,9 +159,12 @@ def test_2():
     return # end of test2 routines
 
 
-def test_3():
-    import string
-    from random import randrange, choice
+def test_3(addr):
+    """
+    """
+    # instantiate an object of the LCD class.
+    mylcd = RPi_I2C_driver.lcd(addr)        
+
     mylcd.lcd_display_string("RPi I2C test #3", 1)
     sleep(2)
     chars = string.printable
@@ -158,12 +174,9 @@ def test_3():
         x = randrange(20)
         y = randrange(4) + 1
         c = choice(chars)
-        try:
-            mylcd.lcd_display_string_pos(c, y, x)
-        except OSError as e:
-            print(f'Error: {e}')
-            return 
-            
+        mylcd.lcd_display_string_pos(c, y, x)
+
+
     mylcd.lcd_clear()
     sleep(1)
     mylcd.backlight(0)    

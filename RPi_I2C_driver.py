@@ -11,7 +11,7 @@
 """
 
 import smbus
-from time import *
+from time import sleep
 
 # LCD Address
 ADDRESS = 0x27
@@ -92,8 +92,8 @@ class i2c_device:
 
 
 class lcd:
-    def __init__(self):  # initializes objects and lcd
-        self.lcd_device = i2c_device(ADDRESS)
+    def __init__(self, addr):  # initializes objects and lcd
+        self.lcd_device = i2c_device(addr)
         # send required startup codes...
         self.lcd_write(0x03)
         self.lcd_write(0x03)
