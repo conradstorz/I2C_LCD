@@ -4,21 +4,31 @@ from time import *
 import string
 from random import randrange, choice
 
+from os import path
+RUNTIME_NAME = path.basename(__file__)
 
+from loguru import logger
+# logger.remove()  # stop any default logger
+logger.add(f"{RUNTIME_NAME}_{time()}.log") # add a logging file.
+LOGGING_LEVEL = "INFO"
+
+
+@logger.catch
 def test_1(addr):
     """Display address of device on device.
     """
+    logger.info('Function Test_1 start.')
     # instantiate an object of the LCD class.
     mylcd = RPi_I2C_driver.lcd(addr)    
-    
-    mylcd.lcd_display_string(f'{str(addr)}', 1)   
+    # display it's address on it's own screen 
+    mylcd.lcd_display_string(f'{str(hex(addr))}', 1)   
 
 
-
-
+@logger.catch
 def test_2(addr):
     """Original test routines from Denis Pleic
     """
+    logger.info('Function Test_2 start.')
     # instantiate an object of the LCD class.
     mylcd = RPi_I2C_driver.lcd(addr)    
     
@@ -159,26 +169,43 @@ def test_2(addr):
     return # end of test2 routines
 
 
+@logger.catch
 def test_3(addr):
     """
     """
+    logger.info('Function Test_3 start.')
     # instantiate an object of the LCD class.
     mylcd = RPi_I2C_driver.lcd(addr)        
 
     mylcd.lcd_display_string("RPi I2C test #3", 1)
     sleep(2)
     chars = string.printable
-    cont = True
-    while cont:
+    count = 500
+    while count:
         # display some random text
         x = randrange(20)
         y = randrange(4) + 1
         c = choice(chars)
         mylcd.lcd_display_string_pos(c, y, x)
-
+        count -= 1
 
     mylcd.lcd_clear()
     sleep(1)
     mylcd.backlight(0)    
     sleep(1)
     return
+
+
+@logger.catch
+def flash_LCD(addr):
+    """Flash the backlight 3 times.
+    """
+    # instantiate an object of the LCD class.
+    mylcd = RPi_I2C_driver.lcd(addr)
+    count = 3
+    while count:
+        mylcd.backlight(0)    
+        sleep(.1)
+        mylcd.backlight(1)    
+        sleep(.1)        
+        count -= 1

@@ -1,33 +1,25 @@
 #!/usr/bin/env python
 
 import smbus
+from random import choice
 from time import sleep
 import examples
+from i2c_utils import find_attached_i2c_devices
 
-bus = smbus.SMBus(1) # 1 indicates /dev/i2c-1
+tests = [examples.test_1, examples.test_2, examples.test_3]
 
 while True:
-    devices = []
-    for device in range(128):
-        try:
-            bus.read_byte(device)
-            print(hex(device))
-            devices.append(device)
-        except OSError as e:
-            pass
+    devices = find_attached_i2c_devices()
+
     print(f'{len(devices)} devices found.')
 
-    for device in devices:
+    for test in tests:
         try:
-            examples.test_1(device)
-            # examples.test_2(device)
-        except OSError as e:
-            print(e)
-
-        try:
-            pass
-            # examples.test_3(device)
-        except OSError as e:
-            print(e)
-
-    sleep(1)
+            c = choice(devices)
+            c_int = int(c, 16)
+            examples.flash_LCD(c_int)        
+            test(c_int)
+            sleep(1)
+        except:
+            print('An error occurred.')
+            sleep(5)

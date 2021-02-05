@@ -70,8 +70,11 @@ class i2c_device:
         self.bus = smbus.SMBus(port)
 
     def write_cmd(self, cmd):  # Write a single command
-        self.bus.write_byte(self.addr, cmd)
-        sleep(0.0001)
+        try:
+            self.bus.write_byte(self.addr, cmd)
+            sleep(0.0001)
+        except OSError as e:
+            pass
 
     def write_cmd_arg(self, cmd, data):  # Write a command and argument
         self.bus.write_byte_data(self.addr, cmd, data)
